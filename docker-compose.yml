@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  court-downloader:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dubai-court-downloader
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
