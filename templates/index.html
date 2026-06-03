@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dubai Court Receipt Fetcher</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 700px; margin: 50px auto; padding: 20px; background-color: #f8f9fa; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        textarea { width: 100%; height: 220px; padding: 12px; margin: 15px 0; border: 1px solid #ced4da; border-radius: 4px; font-family: monospace; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; border: none; padding: 12px 24px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; width: 100%; }
+        button:hover { background-color: #0056b3; }
+        .hint { color: #6c757d; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Dubai Court Receipt Downloader</h2>
+        <p class="hint">Paste your receipt validation links below (one link per line). The engine will process each page, wait for completion, extract the <strong>رقم الطلب</strong>, and package them into an A4 ZIP archive.</p>
+        <form method="POST">
+            <textarea name="urls" placeholder="https://dcsmart.dc.gov.ae/DcTreasurers_Interfaces/CourtsReceipts.aspx?TK=...&#10;https://dcsmart.dc.gov.ae/DcTreasurers_Interfaces/CourtsReceipts.aspx?TK=..."></textarea>
+            <button type="submit" onclick="this.innerHTML='Processing batch... Please wait (Do not close this page)'; this.style.backgroundColor='#6c757d';">Generate & Download ZIP</button>
+        </form>
+    </div>
+</body>
+</html>
