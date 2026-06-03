@@ -8,7 +8,7 @@ from playwright.sync_api import sync_playwright
 
 app = Flask(__name__)
 
-def extract_receipt_number(page):
+def extract_request_number(page):
     try:
         # Give the network time to settle down completely
         page.wait_for_load_state("networkidle", timeout=20000)
@@ -20,8 +20,9 @@ def extract_receipt_number(page):
         # Grab all rendered text on the page
         body_text = page.locator("body").text_content()
         
-        # Robust regex targeting Arabic/English variations of Request/Receipt numbers
-        pattern = r'(?:رقم الطلب|رقم الإيصال|Request Number|Receipt Number|Transaction No)[\s:-]*([A-Za-z0-9-]+)'
+        # STRICTOR REGEX: Explicitly targets ONLY Request/Reference variations
+        # Completely ignores "رقم الإيصال" / "Receipt Number" / "Transaction No"
+        pattern = r'(?:رقم الطلب|Request Number|Reference No|Reference Number|رقم المرجع)[\s:-]*([A-Za-z0-9-]+)'
         match = re.search(pattern, body_text)
         
         if match:
@@ -29,8 +30,8 @@ def extract_receipt_number(page):
     except Exception as e:
         print(f"Extraction error: {e}")
     
-    # Fallback timestamp name if the page fails to load or text isn't found
-    return f"receipt_{int(time.time() * 1000)}"
+    # Fallback if the page is unresponsive or the specific label isn't found
+    return f"request_{int(time.time() * 1000)}"
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -60,7 +61,7 @@ def index():
                         page.wait_for_timeout(3000) 
                         
                         # Extract naming token and sanitize illegal file characters
-                        filename = extract_receipt_number(page)
+                        filename = extract_request_number(page)
                         filename = re.sub(r'[\\/*?:"<>|]', "", filename)
                         
                         # Print exactly to A4
