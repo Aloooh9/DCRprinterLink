@@ -20,9 +20,9 @@ def extract_request_number(page):
         # Grab all rendered text on the page
         body_text = page.locator("body").text_content()
         
-        # STRICTOR REGEX: Explicitly targets ONLY Request/Reference variations
-        # Completely ignores "رقم الإيصال" / "Receipt Number" / "Transaction No"
-        pattern = r'(?:رقم الطلب|Request Number|Reference No|Reference Number|رقم المرجع)[\s:-]*([A-Za-z0-9-]+)'
+        # UPDATED REGEX: Captures alphanumeric blocks separated by spaces, dashes, or slashes
+        # This safely captures formats like "2026 - 123456" or "2026-123456"
+        pattern = r'(?:رقم الطلب|Request Number|Reference No|Reference Number|رقم المرجع)[\s:-]*([A-Za-z0-9]+(?:\s*[-/]\s*[A-Za-z0-9]+)*)'
         match = re.search(pattern, body_text)
         
         if match:
